@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     NotificationBody body = NotificationBody();
   }
 
-  void sendQuickNotification() {
+  void sendQuickNotification() async {
     String token = quickTokenController.value.text;
     String serverKey = quickFirebaseServerKeyToken.value.text;
 
@@ -48,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var json = body.toJson();
 
-    ApiServices.sendNotification(json, serverKey);
+    ApiResponseSates apiResponseSates =
+        await ApiServices.sendNotification(json, serverKey);
+    print(apiResponseSates);
   }
 
   @override

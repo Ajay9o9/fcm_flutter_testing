@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fcm_testing/notification_model.dart';
 import 'package:http/http.dart' as http;
 
+enum ApiResponseSates { SUCCESS, WRONG_TOKEN, WRONG_KEY, NONE }
+
 class ApiServices {
-  static void sendNotification(Map body, String serverKey) async {
+  static Future<ApiResponseSates> sendNotification(
+      Map body, String serverKey) async {
     var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
 
     print(jsonEncode(body));
@@ -19,6 +23,16 @@ class ApiServices {
         HttpHeaders.authorizationHeader: 'Key=$serverKey',
       },
     );
+
+    log(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      if (data['success'] == 1) return ApiResponseSates.SUCCESS;
+      return ApiResponseSates.WRONG_TOKEN;
+    } else {
+      return ApiResponseSates.WRONG_KEY;
+    }
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
