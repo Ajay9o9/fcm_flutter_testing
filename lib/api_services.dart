@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:fcm_testing/home_provider.dart';
 import 'package:fcm_testing/notification_model.dart';
 import 'package:http/http.dart' as http;
 
-enum ApiResponseSates { SUCCESS, WRONG_TOKEN, WRONG_KEY, NONE }
 
 class ApiServices {
   static Future<ApiResponseSates> sendNotification(
